@@ -5,6 +5,10 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "attachments")
 public class Attachment {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Integer id;
     @Column(name = "file_Url")
     private String fileUrl;
     @Column(name = "title")
@@ -29,6 +33,14 @@ public class Attachment {
         this.mimetype = mimetype;
         this.iconLink = iconLink;
         this.fileId = fileId;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getFileUrl() {

@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.PropertySource;
 
 @SpringBootApplication
-@PropertySource("classpath:src/environment.properties")
+@PropertySource("classpath:env.properties")
 public class TaskManagementApplication {
 
 	public static void main(String[] args) {
