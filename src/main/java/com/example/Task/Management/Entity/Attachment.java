@@ -3,7 +3,7 @@ package com.example.Task.Management.Entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "attachments")
+@Table(name = "attachment")
 public class Attachment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
