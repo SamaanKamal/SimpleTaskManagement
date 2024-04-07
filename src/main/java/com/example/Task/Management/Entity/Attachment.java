@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "attachments")
-public class Attachments {
+public class Attachment {
     @Column(name = "file_Url")
     private String fileUrl;
     @Column(name = "title")
@@ -20,10 +20,10 @@ public class Attachments {
     @JoinColumn(name = "event_id")
     private Event event;
 
-    public Attachments() {
+    public Attachment() {
     }
 
-    public Attachments(String fileUrl, String title, String mimetype, String iconLink, String fileId) {
+    public Attachment(String fileUrl, String title, String mimetype, String iconLink, String fileId) {
         this.fileUrl = fileUrl;
         this.title = title;
         this.mimetype = mimetype;
