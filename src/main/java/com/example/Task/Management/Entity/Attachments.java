@@ -5,15 +5,15 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "attachments")
 public class Attachments {
-    @Column(name = "fileUrl")
+    @Column(name = "file_Url")
     private String fileUrl;
     @Column(name = "title")
     private String title;
-    @Column(name = "mimetype")
+    @Column(name = "mime_type")
     private String mimetype;
-    @Column(name = "iconLink")
+    @Column(name = "icon_Link")
     private String iconLink;
-    @Column(name = "fileId")
+    @Column(name = "file_Id")
     private String fileId;
 
     @ManyToOne
