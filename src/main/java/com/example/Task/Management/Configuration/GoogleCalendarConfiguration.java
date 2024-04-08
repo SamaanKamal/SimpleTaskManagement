@@ -28,7 +28,7 @@ public class GoogleCalendarConfiguration {
 
         GoogleCredential credential = GoogleCredential.fromStream(
                          new FileInputStream(serviceAccountKeyFile))
-                .createScoped(Collections.singleton(CalendarScopes.CALENDAR_READONLY));
+                .createScoped(Collections.singleton(CalendarScopes.CALENDAR));
         HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
         JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
