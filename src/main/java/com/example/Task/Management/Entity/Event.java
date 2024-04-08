@@ -42,10 +42,10 @@ public class Event {
 
 
     @Column(name = "creation_time")
-    private final LocalDateTime creationTime = LocalDateTime.now();
+    private LocalDateTime creationTime;
 
     @Column(name = "updated_time")
-    private final LocalDateTime updatedTime= LocalDateTime.now();
+    private LocalDateTime updatedTime;
 
     @OneToMany(mappedBy = "event")
     private List<Attendee> attendees;
@@ -158,5 +158,21 @@ public class Event {
 
     public void setAttachments(List<Attachment> attachments) {
         this.attachments = attachments;
+    }
+
+    public void setStartDatetime(Date startDatetime) {
+        this.startDatetime = startDatetime;
+    }
+
+    public void setEndDatetime(Date endDatetime) {
+        this.endDatetime = endDatetime;
+    }
+
+    public void setCreationTime(LocalDateTime creationTime) {
+        this.creationTime = creationTime;
+    }
+
+    public void setUpdatedTime(LocalDateTime updatedTime) {
+        this.updatedTime = updatedTime;
     }
 }
