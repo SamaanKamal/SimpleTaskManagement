@@ -1,7 +1,6 @@
 package com.example.Task.Management.Entity;
 
 import jakarta.persistence.*;
-import org.checkerframework.checker.units.qual.C;
 
 @Entity
 @Table(name = "Organizer")
