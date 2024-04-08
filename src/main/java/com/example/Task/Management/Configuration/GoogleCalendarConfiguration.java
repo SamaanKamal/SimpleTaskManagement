@@ -25,13 +25,14 @@ public class GoogleCalendarConfiguration {
     private  String appName;
     @Bean
     public Calendar calendarService() throws IOException, GeneralSecurityException {
-
+        // Load the service account credentials from JSON key file
         GoogleCredential credential = GoogleCredential.fromStream(
                          new FileInputStream(serviceAccountKeyFile))
                 .createScoped(Collections.singleton(CalendarScopes.CALENDAR));
         HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
         JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
+        // Build and return a Google Calendar service
         return new Calendar.Builder(httpTransport, jsonFactory,credential)
                 .setApplicationName(appName)
                 .build();

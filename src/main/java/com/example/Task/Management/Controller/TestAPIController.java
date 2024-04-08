@@ -41,12 +41,15 @@ public class TestAPIController {
     }
     @GetMapping("/createEvent")
     public String createEvent() throws IOException, GeneralSecurityException {
+        // creating new Event
         TimeZone timeZone = TimeZone.getTimeZone("Africa/Cairo");
         Event event = new Event()
                 .setSummary("My first event!")
                 .setLocation("Cairo, Egypt")
                 .setDescription("First event with Spring Boot!");
 
+
+        // setting the start date and the end date
         event.setStart(new EventDateTime()
                 .setDateTime(new DateTime("2024-04-08T20:28:00+02:00"))
                 .setTimeZone(timeZone.getID()));
