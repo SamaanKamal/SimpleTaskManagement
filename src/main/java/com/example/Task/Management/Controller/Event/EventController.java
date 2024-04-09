@@ -48,15 +48,15 @@ public class EventController {
         return ResponseEntity.status(HttpStatus.CREATED).body("Event Data Created Successfully");
     }
     @PutMapping("updateEvent/{eventId}")
-    public ResponseEntity<String> updateOrganizer(@PathVariable Integer eventId, @RequestBody EventRequest eventRequest) {
+    public ResponseEntity<Event> updateOrganizer(@PathVariable Integer eventId, @RequestBody EventRequest eventRequest) {
         if(eventRequest==null|| eventId ==null){
-            return ResponseEntity.badRequest().body("Bad Request data");
+            return ResponseEntity.badRequest().build();
         }
-        boolean updated =eventService.updateEvent(eventId, eventRequest);
-        if(!updated){
-            return ResponseEntity.internalServerError().body("There is a problem with updating using the id or from the database");
+        Event updatedEvent =eventService.updateEvent(eventId, eventRequest);
+        if(updatedEvent==null){
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok().body("Event data Updated successfully");
+        return ResponseEntity.ok(updatedEvent);
     }
 
     @DeleteMapping("deleteEvent/{eventId}")

@@ -46,12 +46,15 @@ public class OrganizerController {
         return ResponseEntity.status(HttpStatus.CREATED).body("Organizer Data Created Successfully");
     }
     @PutMapping("updateOrganizer/{organizerId}")
-    public ResponseEntity<String> updateOrganizer(@PathVariable Integer organizerId, @RequestBody OrganizerRequest organizerRequest) {
+    public ResponseEntity<Organizer> updateOrganizer(@PathVariable Integer organizerId, @RequestBody OrganizerRequest organizerRequest) {
         if(organizerRequest==null|| organizerId ==null){
-            return ResponseEntity.badRequest().body("Bad Request data");
+            return ResponseEntity.badRequest().build();
         }
-        organizerService.updateOrganizer(organizerId, organizerRequest);
-        return ResponseEntity.ok().body("Organizer data Updated successfully");
+        Organizer updatedOrganizer =organizerService.updateOrganizer(organizerId, organizerRequest);
+        if (updatedOrganizer == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(updatedOrganizer);
     }
 
     @DeleteMapping("deleteOrganizer/{organizerId}")

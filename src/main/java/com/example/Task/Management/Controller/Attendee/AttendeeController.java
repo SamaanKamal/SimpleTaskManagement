@@ -46,12 +46,15 @@ public class AttendeeController {
         return ResponseEntity.status(HttpStatus.CREATED).body("Attendee Data Created Successfully");
     }
     @PutMapping("updateAttendee/{attendeeId}")
-    public ResponseEntity<String> updateAttendee(@PathVariable Integer attendeeId, @RequestBody AttendeeRequest attendeeRequest) {
+    public ResponseEntity<Attendee> updateAttendee(@PathVariable Integer attendeeId, @RequestBody AttendeeRequest attendeeRequest) {
         if(attendeeRequest==null|| attendeeId ==null){
-            return ResponseEntity.badRequest().body("Bad Request data");
+            return ResponseEntity.badRequest().build();
         }
-        attendeeService.updateAttendee(attendeeId, attendeeRequest);
-        return ResponseEntity.ok().body("Attendee data Updated successfully");
+        Attendee updatedAttendee =attendeeService.updateAttendee(attendeeId, attendeeRequest);
+        if (updatedAttendee == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(updatedAttendee);
     }
 
     @DeleteMapping("deleteAttendee/{attendeeId}")
