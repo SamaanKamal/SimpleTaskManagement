@@ -42,7 +42,7 @@ public class CreatorController {
         creatorService.createCreator(creatorRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body("Creator Data Created Successfully");
     }
-    @PutMapping("/{creatorId}")
+    @PutMapping("updateCreator/{creatorId}")
     public ResponseEntity<String> updateCreator(@PathVariable Integer creatorId, @RequestBody CreatorRequest creatorRequest) {
         if(creatorRequest==null|| creatorId ==null){
             return ResponseEntity.badRequest().body("Bad Request data");
@@ -51,7 +51,7 @@ public class CreatorController {
         return ResponseEntity.ok().body("Creator data Updated successfully");
     }
 
-    @DeleteMapping("/{creatorId}")
+    @DeleteMapping("deleteCreator/{creatorId}")
     public ResponseEntity<String> deleteCreator(@PathVariable Integer creatorId) {
         if(creatorId==null){
             return ResponseEntity.badRequest().body("Bad Request data");
