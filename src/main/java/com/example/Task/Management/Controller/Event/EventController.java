@@ -3,6 +3,7 @@ package com.example.Task.Management.Controller.Event;
 import com.example.Task.Management.Entity.Event;
 import com.example.Task.Management.Helpers.EventHelper.EventRequest;
 import com.example.Task.Management.Helpers.EventHelper.EventResponse;
+import com.example.Task.Management.Service.Event.EventService;
 import com.example.Task.Management.Service.Event.IEventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,9 +16,10 @@ import java.util.List;
 @RequestMapping("/api/Events")
 public class EventController {
     @Autowired
-    private IEventService eventService;
+    private EventService eventService;
     @GetMapping
     public ResponseEntity<EventResponse> fetchEvents(){
+        eventService.syncDatabaseToCache();
         List<Event> events = eventService.getAllEvents();
         if(events==null)
         {
@@ -28,6 +30,7 @@ public class EventController {
     }
     @GetMapping("/{eventId}")
     public ResponseEntity<Event> fetchEvent(@PathVariable Integer eventId){
+        eventService.syncDatabaseToCache();
         Event event = eventService.getEvent(eventId);
         if(event==null)
         {
@@ -61,6 +64,7 @@ public class EventController {
 
     @DeleteMapping("deleteEvent/{eventId}")
     public ResponseEntity<String> deleteOrganizer(@PathVariable Integer eventId) {
+
         if(eventId==null){
             return ResponseEntity.badRequest().body("Bad Request data");
         }

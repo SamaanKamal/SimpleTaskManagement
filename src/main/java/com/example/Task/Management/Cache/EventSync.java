@@ -22,7 +22,9 @@ public class EventSync {
     // Synchronize Database to Cache
     public void syncDatabaseToCache() {
         repository.findAll().forEach(event -> {
-            cache.addEvent(event.getEventId(), event);
+            if(cache.getEvent(event.getEventId())!=event) {
+                cache.addEvent(event.getEventId(), event);
+            }
         });
     }
 }
