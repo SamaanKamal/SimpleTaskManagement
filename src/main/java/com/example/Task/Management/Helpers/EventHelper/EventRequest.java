@@ -26,10 +26,6 @@ public class EventRequest {
 
     private Creator creator;
 
-    private LocalDateTime creationTime;
-
-    private LocalDateTime updatedTime;
-
     private List<Attendee> attendees;
 
     private List<Attachment> attachments;
@@ -37,7 +33,7 @@ public class EventRequest {
     public EventRequest() {
     }
 
-    public EventRequest(String summary, String description, Date startDatetime, Date endDatetime, String location, String status, String visibility, Organizer organizer, Creator creator, LocalDateTime creationTime, LocalDateTime updatedTime, List<Attendee> attendees, List<Attachment> attachments) {
+    public EventRequest(String summary, String description, Date startDatetime, Date endDatetime, String location, String status, String visibility, Organizer organizer, Creator creator, List<Attendee> attendees, List<Attachment> attachments) {
         this.summary = summary;
         this.description = description;
         this.startDatetime = startDatetime;
@@ -47,8 +43,6 @@ public class EventRequest {
         this.visibility = visibility;
         this.organizer = organizer;
         this.creator = creator;
-        this.creationTime = creationTime;
-        this.updatedTime = updatedTime;
         this.attendees = attendees;
         this.attachments = attachments;
     }
@@ -125,21 +119,6 @@ public class EventRequest {
         this.creator = creator;
     }
 
-    public LocalDateTime getCreationTime() {
-        return creationTime;
-    }
-
-    public void setCreationTime(LocalDateTime creationTime) {
-        this.creationTime = creationTime;
-    }
-
-    public LocalDateTime getUpdatedTime() {
-        return updatedTime;
-    }
-
-    public void setUpdatedTime(LocalDateTime updatedTime) {
-        this.updatedTime = updatedTime;
-    }
 
     public List<Attendee> getAttendees() {
         return attendees;
