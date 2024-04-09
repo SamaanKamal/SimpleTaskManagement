@@ -107,7 +107,7 @@ public class EventService implements  IEventService{
     }
 
     @Override
-    public boolean UpdateEvent(Integer eventId, EventRequest eventRequest) {
+    public boolean updateEvent(Integer eventId, EventRequest eventRequest) {
         Event event =eventRepository.findById(eventId).orElseThrow(()->
                 new RuntimeException("Event not found with id:"  + eventId));
         boolean databaseEvent = false;
