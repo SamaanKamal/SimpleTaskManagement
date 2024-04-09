@@ -12,7 +12,14 @@ public class EventCache {
     private final Map<Integer, Event> cache = new HashMap<>();
 
     public void addEvent(Integer eventId, Event event) {
-        cache.put(eventId, event);
+        if(cache.containsKey(eventId))
+        {
+            updateEvent(eventId,event);
+        }
+        else{
+            cache.put(eventId, event);
+        }
+
     }
 
     public void updateEvent(Integer eventId, Event event) {
@@ -23,6 +30,7 @@ public class EventCache {
 
     public void deleteEvent(Integer eventId) {
         cache.remove(eventId);
+
     }
 
     public Event getEvent(Integer eventId) {
