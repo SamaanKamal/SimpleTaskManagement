@@ -6,6 +6,7 @@ import com.example.Task.Management.Repository.AttachmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,22 +26,18 @@ public class AttachmentService implements IAttachmentService {
     }
 
     @Override
-    public String createAttachment(AttachmentRequest attachmentRequest) {
+    public void createAttachment(AttachmentRequest attachmentRequest) {
         Attachment attachment = new Attachment();
         attachment.setFileId(attachmentRequest.getFileId());
         attachment.setFileUrl(attachmentRequest.getFileUrl());
         attachment.setMimetype(attachmentRequest.getMimetype());
         attachment.setTitle(attachmentRequest.getTitle());
         attachment.setIconLink(attachmentRequest.getIconLink());
-        var savedAttachment =attachmentRepository.save(attachment);
-        if(savedAttachment==null){
-            return null;
-        }
-        return "Attachment Created Successfully";
+        attachmentRepository.save(attachment);
     }
 
     @Override
-    public String updateAttachment(Integer attachmentId, AttachmentRequest attachmentRequest) {
+    public void updateAttachment(Integer attachmentId, AttachmentRequest attachmentRequest) {
         Attachment attachment = attachmentRepository.findById(attachmentId).orElseThrow(()->
                 new RuntimeException("Attachment not found with id: " + attachmentId));
         attachment.setFileId(attachmentRequest.getFileId());
@@ -49,20 +46,29 @@ public class AttachmentService implements IAttachmentService {
         attachment.setTitle(attachmentRequest.getTitle());
         attachment.setIconLink(attachmentRequest.getIconLink());
         var updatedAttachment =attachmentRepository.save(attachment);
-        if(updatedAttachment==null){
-            return null;
-        }
-        return "Attachment Updated Successfully";
     }
 
     @Override
-    public String deleteAttachment(Integer attachmentId) {
+    public void deleteAttachment(Integer attachmentId) {
         Attachment attachment =attachmentRepository.findById(attachmentId).orElseThrow(() ->
                 new RuntimeException("Attachment not found with id: " + attachmentId));;
         if(attachment!=null){
             attachmentRepository.delete(attachment);
-            return "Attachment Deleted Successfully";
         }
-        return null;
+    }
+
+    @Override
+    public void addAttachments(List<AttachmentRequest> attachmentRequests) {
+        List<Attachment> attachments = new ArrayList<>();
+        for (AttachmentRequest request : attachmentRequests) {
+            Attachment attachment = new Attachment();
+            attachment.setFileUrl(request.getFileUrl());
+            attachment.setTitle(request.getTitle());
+            attachment.setMimetype(request.getMimetype());
+            attachment.setIconLink(request.getIconLink());
+            attachment.setFileId(request.getFileId());
+            attachments.add(attachment);
+        }
+        attachmentRepository.saveAll(attachments);
     }
 }

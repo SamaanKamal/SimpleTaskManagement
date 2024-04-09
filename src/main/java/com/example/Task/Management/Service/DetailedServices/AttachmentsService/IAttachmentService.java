@@ -10,9 +10,10 @@ public interface IAttachmentService {
     List<Attachment> getAllAttachments();
 
     Attachment getAttachment(Integer attachmentId);
-    String createAttachment(AttachmentRequest attachmentRequest);
-    String updateAttachment(Integer attachmentId, AttachmentRequest attachmentRequest);
-    String deleteAttachment(Integer attachmentId);
+    void createAttachment(AttachmentRequest attachmentRequest);
+    void updateAttachment(Integer attachmentId, AttachmentRequest attachmentRequest);
+    void deleteAttachment(Integer attachmentId);
+    public void addAttachments(List<AttachmentRequest> attachmentRequests );
 
 
 
