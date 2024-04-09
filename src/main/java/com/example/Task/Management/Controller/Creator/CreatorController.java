@@ -4,6 +4,7 @@ import com.example.Task.Management.Entity.Creator;
 import com.example.Task.Management.Helpers.CreatorHelper.CreatorRequest;
 import com.example.Task.Management.Helpers.CreatorHelper.CreatorResponse;
 import com.example.Task.Management.Service.DetailedServices.CreatorService.ICreatorService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/Creators")
 public class CreatorController {
+    @Autowired
     private ICreatorService creatorService;
     @GetMapping
     public ResponseEntity<CreatorResponse> fetchCreators(){
