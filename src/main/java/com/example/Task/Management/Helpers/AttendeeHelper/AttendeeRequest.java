@@ -89,4 +89,5 @@ public class AttendeeRequest {
     public void setSelf(boolean self) {
         this.self = self;
     }
+
 }
