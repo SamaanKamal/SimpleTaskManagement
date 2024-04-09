@@ -16,9 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
-import java.util.TimeZone;
+import java.util.*;
 
 @Service
 public class EventService implements  IEventService{
@@ -38,7 +36,8 @@ public class EventService implements  IEventService{
     @Override
     public List<Event> getAllEvents() {
         // check the cache first
-        List<Event> events = (List<Event>) eventCache.getAllEvents();
+        Collection<Event>eventCollection= eventCache.getAllEvents();
+        List<Event> events = new ArrayList<>(eventCollection);
         if(events==null||events.isEmpty()){
             //if null get it from the database
             events =eventRepository.findAll();
