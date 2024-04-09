@@ -1,5 +1,6 @@
 package com.example.Task.Management.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -34,10 +35,12 @@ public class Event {
 
     @OneToOne
     @JoinColumn(name = "organizer_id")
+    @JsonIgnore
     private Organizer organizer;
 
     @OneToOne
     @JoinColumn(name = "creator_id")
+    @JsonIgnore
     private Creator creator;
 
 
