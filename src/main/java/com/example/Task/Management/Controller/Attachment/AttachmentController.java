@@ -47,7 +47,7 @@ public class AttachmentController {
         return ResponseEntity.status(HttpStatus.CREATED).body("Attachment Data Created Successfully");
     }
     @PutMapping("/{attachmentId}")
-    public ResponseEntity<String> updateClient(@PathVariable Integer attachmentId, @RequestBody AttachmentRequest attachmentRequest) {
+    public ResponseEntity<String> updateAttachment(@PathVariable Integer attachmentId, @RequestBody AttachmentRequest attachmentRequest) {
         if(attachmentRequest==null|| attachmentId ==null){
             return ResponseEntity.badRequest().body("Bad Request data");
         }
@@ -56,7 +56,7 @@ public class AttachmentController {
     }
 
     @DeleteMapping("/{attachmentId}")
-    public ResponseEntity<String> deleteClient(@PathVariable Integer attachmentId) {
+    public ResponseEntity<String> deleteAttachment(@PathVariable Integer attachmentId) {
         if(attachmentId==null){
             return ResponseEntity.badRequest().body("Bad Request data");
         }
