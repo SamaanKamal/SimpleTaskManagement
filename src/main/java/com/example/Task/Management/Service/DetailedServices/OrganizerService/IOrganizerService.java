@@ -11,6 +11,6 @@ public interface IOrganizerService {
     List<Organizer> getAllOrganizers();
     Organizer getOrganizer(Integer organizerId);
     void createOrganizer(OrganizerRequest organizerRequest);
-    void updateOrganizer(Integer organizerId,OrganizerRequest organizerRequest);
+    Organizer updateOrganizer(Integer organizerId,OrganizerRequest organizerRequest);
     void deleteOrganizer(Integer organizerId);
 }

@@ -11,7 +11,7 @@ public interface IAttendeeService {
     List<Attendee> getAllAttendees();
     Attendee getAttendee(Integer attendeeId);
     void createAttendee(AttendeeRequest attendeeRequest);
-    void updateAttendee(Integer attendeeId,AttendeeRequest attendeeRequest);
+    Attendee updateAttendee(Integer attendeeId,AttendeeRequest attendeeRequest);
     void deleteAttendee(Integer attendeeId);
     void addAttendees(List<AttendeeRequest> attendeeRequests);
 

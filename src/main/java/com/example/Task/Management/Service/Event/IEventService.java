@@ -9,7 +9,7 @@ public interface IEventService {
     List<Event> getAllEvents();
     Event getEvent(Integer eventId);
     boolean addEvent(EventRequest eventRequest);
-    boolean updateEvent(Integer eventId,EventRequest eventRequest);
+    Event updateEvent(Integer eventId,EventRequest eventRequest);
     boolean deleteEvent(Integer eventId);
 
 }

@@ -107,10 +107,9 @@ public class EventService implements  IEventService{
     }
 
     @Override
-    public boolean updateEvent(Integer eventId, EventRequest eventRequest) {
+    public Event updateEvent(Integer eventId, EventRequest eventRequest) {
         Event event =eventRepository.findById(eventId).orElseThrow(()->
                 new RuntimeException("Event not found with id:"  + eventId));
-        boolean databaseEvent = false;
         event.setSummary(eventRequest.getSummary());
         event.setDescription(eventRequest.getDescription());
         event.setCreationTime(LocalDateTime.now());
@@ -125,11 +124,8 @@ public class EventService implements  IEventService{
         event.setCreator(eventRequest.getCreator());
         event.setOrganizer(eventRequest.getOrganizer());
         Event returnedEvent = eventRepository.save(event);
-        if(returnedEvent!=null)
-            databaseEvent=true;
-
         eventCache.updateEvent(eventId,returnedEvent);
-        return databaseEvent;
+        return returnedEvent;
     }
 
     @Override

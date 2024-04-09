@@ -3,6 +3,7 @@ package com.example.Task.Management.Service.DetailedServices.OrganizerService;
 import com.example.Task.Management.Entity.Organizer;
 import com.example.Task.Management.Helpers.OrganizerHelper.OrganizerRequest;
 import com.example.Task.Management.Repository.OrganizerRepository;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,13 +36,14 @@ public class OrganizerService implements IOrganizerService{
     }
 
     @Override
-    public void updateOrganizer(Integer organizerId, OrganizerRequest organizerRequest) {
+    public Organizer updateOrganizer(Integer organizerId, OrganizerRequest organizerRequest) {
         Organizer organizer =organizerRepository.findById(organizerId).orElseThrow(()->
                 new RuntimeException("Organizer not found with id: " + organizerId));
         organizer.setEmail(organizerRequest.getEmail());
         organizer.setDisplayName(organizerRequest.getDisplayName());
         organizer.setSelf(organizerRequest.isSelf());
-        organizerRepository.save(organizer);
+        Organizer updatedOrganizer =organizerRepository.save(organizer);
+        return updatedOrganizer;
     }
 
     @Override

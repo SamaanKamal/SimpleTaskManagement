@@ -11,7 +11,7 @@ public interface IAttachmentService {
 
     Attachment getAttachment(Integer attachmentId);
     void createAttachment(AttachmentRequest attachmentRequest);
-    void updateAttachment(Integer attachmentId, AttachmentRequest attachmentRequest);
+    Attachment updateAttachment(Integer attachmentId, AttachmentRequest attachmentRequest);
     void deleteAttachment(Integer attachmentId);
     public void addAttachments(List<AttachmentRequest> attachmentRequests );
 

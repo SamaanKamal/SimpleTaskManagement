@@ -11,6 +11,6 @@ public interface ICreatorService {
     List<Creator> getAllCreators();
     Creator getCreator(Integer creatorId);
     void createCreator(CreatorRequest creatorRequest);
-    void updateCreator(Integer creatorId,CreatorRequest creatorRequest);
+    Creator updateCreator(Integer creatorId,CreatorRequest creatorRequest);
     void deleteCreator(Integer creatorId);
 }

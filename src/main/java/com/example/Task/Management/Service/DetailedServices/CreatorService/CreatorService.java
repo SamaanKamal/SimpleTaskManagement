@@ -35,13 +35,14 @@ public class CreatorService implements  ICreatorService {
     }
 
     @Override
-    public void updateCreator(Integer creatorId, CreatorRequest creatorRequest) {
+    public Creator updateCreator(Integer creatorId, CreatorRequest creatorRequest) {
         Creator creator =creatorRepository.findById(creatorId).orElseThrow(()->
                 new RuntimeException("Creator not found with id: " + creatorId));
         creator.setEmail(creatorRequest.getEmail());
         creator.setDisplayName(creatorRequest.getDisplayName());
         creator.setSelf(creatorRequest.isSelf());
-        creatorRepository.save(creator);
+        Creator updatedCreator =creatorRepository.save(creator);
+        return updatedCreator;
     }
 
     @Override

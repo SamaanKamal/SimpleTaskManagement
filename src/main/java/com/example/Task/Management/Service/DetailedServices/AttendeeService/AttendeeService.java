@@ -40,7 +40,7 @@ public class AttendeeService implements IAttendeeService {
     }
 
     @Override
-    public void updateAttendee(Integer attendeeId, AttendeeRequest attendeeRequest) {
+    public Attendee updateAttendee(Integer attendeeId, AttendeeRequest attendeeRequest) {
         Attendee attendee =attendeeRepository.findById(attendeeId).orElseThrow(()->
                 new RuntimeException("Attendee not found with id: " + attendeeId));
         attendee.setEmail(attendeeRequest.getEmail());
@@ -51,7 +51,8 @@ public class AttendeeService implements IAttendeeService {
         attendee.setResponseStatus(attendeeRequest.getResponseStatus());
         attendee.setResource(attendeeRequest.isResource());
         attendee.setSelf(attendeeRequest.isSelf());
-        attendeeRepository.save(attendee);
+        Attendee updatedAttendee = attendeeRepository.save(attendee);
+        return updatedAttendee;
     }
 
     @Override

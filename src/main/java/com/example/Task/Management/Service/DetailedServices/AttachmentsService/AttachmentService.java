@@ -37,7 +37,7 @@ public class AttachmentService implements IAttachmentService {
     }
 
     @Override
-    public void updateAttachment(Integer attachmentId, AttachmentRequest attachmentRequest) {
+    public Attachment updateAttachment(Integer attachmentId, AttachmentRequest attachmentRequest) {
         Attachment attachment = attachmentRepository.findById(attachmentId).orElseThrow(()->
                 new RuntimeException("Attachment not found with id: " + attachmentId));
         attachment.setFileId(attachmentRequest.getFileId());
@@ -45,7 +45,8 @@ public class AttachmentService implements IAttachmentService {
         attachment.setMimetype(attachmentRequest.getMimetype());
         attachment.setTitle(attachmentRequest.getTitle());
         attachment.setIconLink(attachmentRequest.getIconLink());
-        attachmentRepository.save(attachment);
+        Attachment updatedAttachment =attachmentRepository.save(attachment);
+        return updatedAttachment;
     }
 
     @Override
