@@ -45,7 +45,7 @@ public class AttachmentService implements IAttachmentService {
         attachment.setMimetype(attachmentRequest.getMimetype());
         attachment.setTitle(attachmentRequest.getTitle());
         attachment.setIconLink(attachmentRequest.getIconLink());
-        var updatedAttachment =attachmentRepository.save(attachment);
+        attachmentRepository.save(attachment);
     }
 
     @Override
