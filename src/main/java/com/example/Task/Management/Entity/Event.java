@@ -35,12 +35,10 @@ public class Event {
 
     @OneToOne
     @JoinColumn(name = "organizer_id")
-    @JsonIgnore
     private Organizer organizer;
 
     @OneToOne
     @JoinColumn(name = "creator_id")
-    @JsonIgnore
     private Creator creator;
 
 

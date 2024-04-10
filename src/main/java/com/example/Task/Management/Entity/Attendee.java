@@ -17,7 +17,7 @@ public class Attendee {
     private boolean resource;
     @Column(name = "optional")
     private boolean optional;
-    @Column(name = "response")
+    @Column(name = "response_Status")
     private String responseStatus;
     @Column(name = "comment")
     private String comment;

@@ -10,9 +10,6 @@ public class Creator {
     @Column(name = "creator_id")
     private Integer creatorId;
 
-    @OneToOne(mappedBy = "creator")
-    private Event event;
-
     @Column(name = "email")
     private String email;
     @Column(name = "display_name")
@@ -37,13 +34,6 @@ public class Creator {
         this.creatorId = creatorId;
     }
 
-    public Event getEvent() {
-        return event;
-    }
-
-    public void setEvent(Event event) {
-        this.event = event;
-    }
 
     public String getEmail() {
         return email;

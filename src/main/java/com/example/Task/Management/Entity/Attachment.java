@@ -20,7 +20,7 @@ public class Attachment {
     @Column(name = "file_Id")
     private String fileId;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH})
     @JoinColumn(name = "event_id")
     private Event event;
 

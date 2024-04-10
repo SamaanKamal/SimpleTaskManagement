@@ -10,9 +10,6 @@ public class Organizer {
     @Column(name = "organizer_id")
     private Integer organizerId;
 
-    @OneToOne(mappedBy = "organizer")
-    private Event event;
-
     @Column(name = "email")
     private String email;
     @Column(name = "display_name")
@@ -35,14 +32,6 @@ public class Organizer {
 
     public void setOrganizerId(Integer organizerId) {
         this.organizerId = organizerId;
-    }
-
-    public Event getEvent() {
-        return event;
-    }
-
-    public void setEvent(Event event) {
-        this.event = event;
     }
 
     public String getEmail() {
