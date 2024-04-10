@@ -4,7 +4,6 @@ import com.example.Task.Management.Entity.Event;
 import com.example.Task.Management.Helpers.EventHelper.EventRequest;
 import com.example.Task.Management.Helpers.EventHelper.EventResponse;
 import com.example.Task.Management.Service.Event.EventService;
-import com.example.Task.Management.Service.Event.IEventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -73,5 +72,13 @@ public class EventController {
             return ResponseEntity.internalServerError().body("There is a problem with deleting using the id or from the database");
         }
         return ResponseEntity.ok().body("Event Data Deleted Successfully");
+    }
+    @GetMapping("/recover")
+    public ResponseEntity<String> recoverDataFromDatabase(){
+        boolean recovered =eventService.recovery();
+        if(!recovered){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Database is either null or problem with the serve");
+        }
+        return  ResponseEntity.ok().body("Event Data Recovered  from the database");
     }
 }

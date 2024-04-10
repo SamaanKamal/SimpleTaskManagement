@@ -284,4 +284,14 @@ public class EventService implements  IEventService{
         event.setAttendees(updatedAttendees);
     }
 
+    public boolean recovery(){
+        syncDatabaseToCache();
+        Collection<Event>eventCollection= eventCache.getAllEvents();
+        List<Event> events = new ArrayList<>(eventCollection);
+        if(events==null||events.isEmpty()){
+            return false;
+        }
+        return true;
+    }
+
 }
