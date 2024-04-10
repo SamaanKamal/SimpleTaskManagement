@@ -4,9 +4,7 @@ import com.example.Task.Management.Cache.EventCache;
 import com.example.Task.Management.Cache.EventSync;
 import com.example.Task.Management.Entity.*;
 import com.example.Task.Management.Helpers.EventHelper.EventRequest;
-import com.example.Task.Management.Repository.CreatorRepository;
 import com.example.Task.Management.Repository.EventRepository;
-import com.example.Task.Management.Repository.OrganizerRepository;
 import com.example.Task.Management.Service.DetailedServices.CreatorService.ICreatorService;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.Calendar;
@@ -35,11 +33,6 @@ public class EventService implements  IEventService{
     private EventCache eventCache;
     @Autowired
     private EventSync eventSync;
-    @Autowired
-    private OrganizerRepository organizerRepository;
-    @Autowired
-    private CreatorRepository creatorRepository;
-
     @Autowired
     private ICreatorService creatorService;
 
@@ -94,12 +87,9 @@ public class EventService implements  IEventService{
         event.setEndDatetime(eventRequest.getEndDatetime());
         event.setAttendees(eventRequest.getAttendees());
         event.setAttachments(eventRequest.getAttachments());
-        Creator creator = eventRequest.getCreator();
-        creatorRepository.save(creator);
         event.setCreator(eventRequest.getCreator());
-        Organizer organizer = eventRequest.getOrganizer();
-        organizerRepository.save(organizer);
         event.setOrganizer(eventRequest.getOrganizer());
+
         Event returnedEvent = eventRepository.save(event);
         if(returnedEvent!=null)
             databaseEvent=true;
@@ -134,12 +124,7 @@ public class EventService implements  IEventService{
         event.setEndDatetime(eventRequest.getEndDatetime());
         event.setAttendees(eventRequest.getAttendees());
         event.setAttachments(eventRequest.getAttachments());
-
-        Creator creator = eventRequest.getCreator();
-        creatorRepository.save(creator);
         event.setCreator(eventRequest.getCreator());
-        Organizer organizer = eventRequest.getOrganizer();
-        organizerRepository.save(organizer);
         event.setOrganizer(eventRequest.getOrganizer());
 
         Event returnedEvent = eventRepository.save(event);
