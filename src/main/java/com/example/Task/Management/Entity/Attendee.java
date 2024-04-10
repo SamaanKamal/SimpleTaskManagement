@@ -25,9 +25,9 @@ public class Attendee {
     private int additionalGuests;
     @Column(name = "self")
     private boolean self;
-    @ManyToOne
-    @JoinColumn(name = "event_id")
-    private Event event;
+//    @ManyToOne
+//    @JoinColumn(name = "event_id")
+//    private Event event;
 
     public Attendee() {
     }
@@ -115,11 +115,11 @@ public class Attendee {
         this.self = self;
     }
 
-    public Event getEvent() {
-        return event;
-    }
-
-    public void setEvent(Event event) {
-        this.event = event;
-    }
+//    public Event getEvent() {
+//        return event;
+//    }
+//
+//    public void setEvent(Event event) {
+//        this.event = event;
+//    }
 }
