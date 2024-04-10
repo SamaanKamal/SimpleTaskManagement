@@ -34,21 +34,17 @@ CREATE TABLE Attendee (
 );
 CREATE TABLE Organizer (
     organizer_id INT PRIMARY KEY AUTO_INCREMENT,
-    event_id INT,
     email varchar(255),
     display_name varchar(255),
-    self boolean,
-    FOREIGN KEY (event_id) REFERENCES Event(event_id)
+    self boolean
 );
 
 
 CREATE TABLE Creator (
 	creator_id INT PRIMARY KEY AUTO_INCREMENT,
-    event_id INT,
     email varchar(255),
     display_name VARCHAR(255),
-    self boolean,
-    FOREIGN KEY (event_id) REFERENCES Event(event_id)
+    self boolean
 );
 
 CREATE TABLE attachment(
