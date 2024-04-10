@@ -4,8 +4,11 @@ import com.example.Task.Management.Cache.EventCache;
 import com.example.Task.Management.Cache.EventSync;
 import com.example.Task.Management.Entity.*;
 import com.example.Task.Management.Helpers.EventHelper.EventRequest;
+import com.example.Task.Management.Repository.CreatorRepository;
 import com.example.Task.Management.Repository.EventRepository;
+import com.example.Task.Management.Repository.OrganizerRepository;
 import com.example.Task.Management.Service.DetailedServices.CreatorService.ICreatorService;
+import com.example.Task.Management.Service.DetailedServices.OrganizerService.IOrganizerService;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.model.EventDateTime;
@@ -35,6 +38,14 @@ public class EventService implements  IEventService{
     private EventSync eventSync;
     @Autowired
     private ICreatorService creatorService;
+    @Autowired
+    private CreatorRepository creatorRepository;
+
+    @Autowired
+    private IOrganizerService organizerService;
+
+    @Autowired
+    private OrganizerRepository organizerRepository;
 
     @Override
     public List<Event> getAllEvents() {
@@ -76,17 +87,24 @@ public class EventService implements  IEventService{
     public boolean addEvent(EventRequest eventRequest) {
         Event event = new Event();
         boolean databaseEvent =false;
-        event.setSummary(eventRequest.getSummary());
-        event.setDescription(eventRequest.getDescription());
+        setBasicEventFields(event,eventRequest);
         event.setCreationTime(LocalDateTime.now());
-        event.setStatus(eventRequest.getStatus());
-        event.setDescription(eventRequest.getDescription());
-        event.setLocation(eventRequest.getLocation());
-        event.setVisibility(eventRequest.getVisibility());
-        event.setStartDatetime(eventRequest.getStartDatetime());
-        event.setEndDatetime(eventRequest.getEndDatetime());
-        event.setAttendees(eventRequest.getAttendees());
-        event.setAttachments(eventRequest.getAttachments());
+
+        List<Attendee> attendees = new ArrayList<>();
+        for(Attendee attendee:eventRequest.getAttendees()){
+            Attendee attendee1 = new Attendee(attendee.getEmail(),attendee.getDisplayName(),attendee.isResource(),
+                    attendee.isOptional(),attendee.getResponseStatus(),attendee.getComment(),attendee.getAdditionalGuests(),attendee.isSelf());
+            attendees.add(attendee1);
+        }
+        event.setAttendees(attendees);
+
+        List<Attachment> attachments = new ArrayList<>();
+        for(Attachment attachment:eventRequest.getAttachments()){
+            Attachment attachment1 = new Attachment(attachment.getFileUrl(), attachment.getTitle(), attachment.getMimetype(), attachment.getIconLink(),attachment.getFileId());
+            attachments.add(attachment1);
+        }
+        event.setAttachments(attachments);
+
         event.setCreator(eventRequest.getCreator());
         event.setOrganizer(eventRequest.getOrganizer());
 
@@ -105,7 +123,6 @@ public class EventService implements  IEventService{
         if(databaseEvent&&APIEvent)
             return true;
 
-
         return false;
     }
 
@@ -113,19 +130,15 @@ public class EventService implements  IEventService{
     public Event updateEvent(Integer eventId, EventRequest eventRequest) {
         Event event =eventRepository.findById(eventId).orElseThrow(()->
                 new RuntimeException("Event not found with id:"  + eventId));
-        event.setSummary(eventRequest.getSummary());
-        event.setDescription(eventRequest.getDescription());
-        event.setCreationTime(LocalDateTime.now());
-        event.setStatus(eventRequest.getStatus());
-        event.setDescription(eventRequest.getDescription());
-        event.setLocation(eventRequest.getLocation());
-        event.setVisibility(eventRequest.getVisibility());
-        event.setStartDatetime(eventRequest.getStartDatetime());
-        event.setEndDatetime(eventRequest.getEndDatetime());
-        event.setAttendees(eventRequest.getAttendees());
-        event.setAttachments(eventRequest.getAttachments());
-        event.setCreator(eventRequest.getCreator());
-        event.setOrganizer(eventRequest.getOrganizer());
+        setBasicEventFields(event,eventRequest);
+        event.setUpdatedTime(LocalDateTime.now());
+
+        updateAttachments(event,eventRequest.getAttachments());
+        updateAttendees(event,eventRequest.getAttendees());
+        Creator creator = creatorService.getCreator(eventRequest.getCreator().getCreatorId());
+        event.setCreator(creator);
+        Organizer organizer = organizerService.getOrganizer(eventRequest.getOrganizer().getOrganizerId());
+        event.setOrganizer(organizer);
 
         Event returnedEvent = eventRepository.save(event);
         eventCache.updateEvent(eventId,returnedEvent);
@@ -195,6 +208,95 @@ public class EventService implements  IEventService{
     @Scheduled(fixedRate = 3600000) // 3600000 ms = 1 hour
     public void scheduledCacheSynchronization() {
         eventSync.syncCacheToDatabase();
+    }
+    private void setBasicEventFields(Event event, EventRequest eventRequest) {
+        event.setSummary(eventRequest.getSummary());
+        event.setDescription(eventRequest.getDescription());
+        event.setStatus(eventRequest.getStatus());
+        event.setLocation(eventRequest.getLocation());
+        event.setVisibility(eventRequest.getVisibility());
+        event.setStartDatetime(eventRequest.getStartDatetime());
+        event.setEndDatetime(eventRequest.getEndDatetime());
+    }
+
+    private void updateAttachments(Event event, List<Attachment> attachments) {
+        List<Attachment> updatedAttachments = new ArrayList<>();
+
+        for (Attachment attachmentItem : attachments) {
+            if (attachmentItem.getId() != null) {
+                // If the attachment already exists, update its properties
+                Attachment existingAttachment = event.getAttachments().stream()
+                        .filter(attachment -> attachment.getId().equals(attachmentItem.getId()))
+                        .findFirst()
+                        .orElseThrow(() -> new RuntimeException("Attachment not found with id:" + attachmentItem.getId()));
+
+                // Update attachment
+                existingAttachment.setFileUrl(attachmentItem.getFileUrl());
+                existingAttachment.setTitle(attachmentItem.getTitle());
+                existingAttachment.setMimetype(attachmentItem.getMimetype());
+                existingAttachment.setIconLink(attachmentItem.getIconLink());
+                existingAttachment.setFileId(attachmentItem.getFileId());
+
+                updatedAttachments.add(existingAttachment);
+            } else {
+                // If the attachment is new, create a new instance and add it to the list
+                Attachment newAttachment = new Attachment();
+                newAttachment.setFileUrl(attachmentItem.getFileUrl());
+                newAttachment.setTitle(attachmentItem.getTitle());
+                newAttachment.setMimetype(attachmentItem.getMimetype());
+                newAttachment.setIconLink(attachmentItem.getIconLink());
+                newAttachment.setFileId(attachmentItem.getFileId());
+
+                updatedAttachments.add(newAttachment);
+            }
+        }
+
+        // Set the updated attachments to the event
+        event.setAttachments(updatedAttachments);
+    }
+    private void updateAttendees(Event event, List<Attendee> attendees) {
+        List<Attendee> updatedAttendees = new ArrayList<>();
+
+        for (Attendee attendeeItem : attendees) {
+            if (attendeeItem.getAttendeeId() != null) {
+                // If the attendee already exists, update it
+                Attendee existingAttendee = event.getAttendees().stream()
+                        .filter(attendee -> attendee.getAttendeeId().equals(attendeeItem.getAttendeeId()))
+                        .findFirst()
+                        .orElseThrow(() -> new RuntimeException("Attachment not found with id: " + attendeeItem.getAttendeeId()));
+
+                // Update attachment
+                existingAttendee.setEmail(attendeeItem.getEmail());
+                existingAttendee.setDisplayName(attendeeItem.getDisplayName());
+                existingAttendee.setComment(attendeeItem.getComment());
+                existingAttendee.setResponseStatus(attendeeItem.getResponseStatus());
+                existingAttendee.setResource(attendeeItem.isResource());
+                existingAttendee.setOptional(attendeeItem.isOptional());
+                existingAttendee.setAdditionalGuests(attendeeItem.getAdditionalGuests());
+                existingAttendee.setSelf(attendeeItem.isSelf());
+
+
+
+                updatedAttendees.add(existingAttendee);
+            } else {
+                // If the attachment is new, create a new instance and add it to the list
+                Attendee newAttendee = new Attendee();
+                newAttendee.setEmail(attendeeItem.getEmail());
+                newAttendee.setDisplayName(attendeeItem.getDisplayName());
+                newAttendee.setComment(attendeeItem.getComment());
+                newAttendee.setResponseStatus(attendeeItem.getResponseStatus());
+                newAttendee.setResource(attendeeItem.isResource());
+                newAttendee.setOptional(attendeeItem.isOptional());
+                newAttendee.setAdditionalGuests(attendeeItem.getAdditionalGuests());
+                newAttendee.setSelf(attendeeItem.isSelf());
+
+
+                updatedAttendees.add(newAttendee);
+            }
+        }
+
+        // Set the updated attachments to the event
+        event.setAttendees(updatedAttendees);
     }
 
 }
