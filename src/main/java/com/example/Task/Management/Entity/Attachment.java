@@ -20,9 +20,9 @@ public class Attachment {
     @Column(name = "file_Id")
     private String fileId;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH})
-    @JoinColumn(name = "event_id")
-    private Event event;
+//    @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH})
+//    @JoinColumn(name = "event_id")
+//    private Event event;
 
     public Attachment() {
     }
@@ -83,11 +83,11 @@ public class Attachment {
         this.fileId = fileId;
     }
 
-    public Event getEvent() {
-        return event;
-    }
-
-    public void setEvent(Event event) {
-        this.event = event;
-    }
+//    public Event getEvent() {
+//        return event;
+//    }
+//
+//    public void setEvent(Event event) {
+//        this.event = event;
+//    }
 }
