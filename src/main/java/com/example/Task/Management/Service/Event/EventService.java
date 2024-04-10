@@ -4,9 +4,7 @@ import com.example.Task.Management.Cache.EventCache;
 import com.example.Task.Management.Cache.EventSync;
 import com.example.Task.Management.Entity.*;
 import com.example.Task.Management.Helpers.EventHelper.EventRequest;
-import com.example.Task.Management.Repository.CreatorRepository;
 import com.example.Task.Management.Repository.EventRepository;
-import com.example.Task.Management.Repository.OrganizerRepository;
 import com.example.Task.Management.Service.DetailedServices.CreatorService.ICreatorService;
 import com.example.Task.Management.Service.DetailedServices.OrganizerService.IOrganizerService;
 import com.google.api.client.util.DateTime;
@@ -39,13 +37,7 @@ public class EventService implements  IEventService{
     @Autowired
     private ICreatorService creatorService;
     @Autowired
-    private CreatorRepository creatorRepository;
-
-    @Autowired
     private IOrganizerService organizerService;
-
-    @Autowired
-    private OrganizerRepository organizerRepository;
 
     @Override
     public List<Event> getAllEvents() {
@@ -224,13 +216,11 @@ public class EventService implements  IEventService{
 
         for (Attachment attachmentItem : attachments) {
             if (attachmentItem.getId() != null) {
-                // If the attachment already exists, update its properties
                 Attachment existingAttachment = event.getAttachments().stream()
                         .filter(attachment -> attachment.getId().equals(attachmentItem.getId()))
                         .findFirst()
                         .orElseThrow(() -> new RuntimeException("Attachment not found with id:" + attachmentItem.getId()));
 
-                // Update attachment
                 existingAttachment.setFileUrl(attachmentItem.getFileUrl());
                 existingAttachment.setTitle(attachmentItem.getTitle());
                 existingAttachment.setMimetype(attachmentItem.getMimetype());
@@ -239,7 +229,6 @@ public class EventService implements  IEventService{
 
                 updatedAttachments.add(existingAttachment);
             } else {
-                // If the attachment is new, create a new instance and add it to the list
                 Attachment newAttachment = new Attachment();
                 newAttachment.setFileUrl(attachmentItem.getFileUrl());
                 newAttachment.setTitle(attachmentItem.getTitle());
@@ -251,7 +240,6 @@ public class EventService implements  IEventService{
             }
         }
 
-        // Set the updated attachments to the event
         event.setAttachments(updatedAttachments);
     }
     private void updateAttendees(Event event, List<Attendee> attendees) {
@@ -259,13 +247,12 @@ public class EventService implements  IEventService{
 
         for (Attendee attendeeItem : attendees) {
             if (attendeeItem.getAttendeeId() != null) {
-                // If the attendee already exists, update it
+
                 Attendee existingAttendee = event.getAttendees().stream()
                         .filter(attendee -> attendee.getAttendeeId().equals(attendeeItem.getAttendeeId()))
                         .findFirst()
                         .orElseThrow(() -> new RuntimeException("Attachment not found with id: " + attendeeItem.getAttendeeId()));
 
-                // Update attachment
                 existingAttendee.setEmail(attendeeItem.getEmail());
                 existingAttendee.setDisplayName(attendeeItem.getDisplayName());
                 existingAttendee.setComment(attendeeItem.getComment());
@@ -279,7 +266,6 @@ public class EventService implements  IEventService{
 
                 updatedAttendees.add(existingAttendee);
             } else {
-                // If the attachment is new, create a new instance and add it to the list
                 Attendee newAttendee = new Attendee();
                 newAttendee.setEmail(attendeeItem.getEmail());
                 newAttendee.setDisplayName(attendeeItem.getDisplayName());
@@ -295,7 +281,6 @@ public class EventService implements  IEventService{
             }
         }
 
-        // Set the updated attachments to the event
         event.setAttendees(updatedAttendees);
     }
 
