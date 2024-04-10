@@ -32,6 +32,12 @@ public class Event {
     private String status;
     @Column(name = "visibility")
     private String visibility;
+    @Column(name = "creation_time")
+    private LocalDateTime creationTime;
+
+    @Column(name = "updated_time")
+    private LocalDateTime updatedTime;
+
 
     @ManyToOne
     @JoinColumn(name = "organizer_id",referencedColumnName = "organizer_id")
@@ -40,13 +46,6 @@ public class Event {
     @ManyToOne
     @JoinColumn(name = "creator_id",referencedColumnName = "creator_id")
     private Creator creator;
-
-
-    @Column(name = "creation_time")
-    private LocalDateTime creationTime;
-
-    @Column(name = "updated_time")
-    private LocalDateTime updatedTime;
 
     @OneToMany(cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.REMOVE,CascadeType.DETACH})
     @JoinColumn(name = "event_id")
