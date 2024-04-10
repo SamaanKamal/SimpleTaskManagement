@@ -4,12 +4,12 @@ import com.example.Task.Management.Entity.Event;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 @Component
 public class EventCache {
-    private final Map<Integer, Event> cache = new HashMap<>();
+    private final Map<Integer, Event> cache = new TreeMap<>();
 
     public void addEvent(Integer eventId, Event event) {
         if(cache.containsKey(eventId))
