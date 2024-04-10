@@ -33,12 +33,12 @@ public class Event {
     @Column(name = "visibility")
     private String visibility;
 
-    @OneToOne
-    @JoinColumn(name = "organizer_id")
+    @ManyToOne
+    @JoinColumn(name = "organizer_id",referencedColumnName = "organizer_id")
     private Organizer organizer;
 
-    @OneToOne
-    @JoinColumn(name = "creator_id")
+    @ManyToOne
+    @JoinColumn(name = "creator_id",referencedColumnName = "creator_id")
     private Creator creator;
 
 
@@ -48,10 +48,12 @@ public class Event {
     @Column(name = "updated_time")
     private LocalDateTime updatedTime;
 
-    @OneToMany(mappedBy = "event")
+    @OneToMany(cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.REMOVE,CascadeType.DETACH})
+    @JoinColumn(name = "event_id")
     private List<Attendee> attendees;
 
-    @OneToMany(mappedBy = "event")
+    @OneToMany(cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.REMOVE,CascadeType.DETACH})
+    @JoinColumn(name = "event_id")
     private List<Attachment> attachments;
 
     public Event() {
