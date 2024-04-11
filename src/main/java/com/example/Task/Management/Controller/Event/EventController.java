@@ -50,7 +50,7 @@ public class EventController {
         return ResponseEntity.status(HttpStatus.CREATED).body("Event Data Created Successfully");
     }
     @PutMapping("updateEvent/{eventId}")
-    public ResponseEntity<Event> updateOrganizer(@PathVariable Integer eventId, @RequestBody EventRequest eventRequest) {
+    public ResponseEntity<Event> updateEvent(@PathVariable Integer eventId, @RequestBody EventRequest eventRequest) {
         if(eventRequest==null|| eventId ==null){
             return ResponseEntity.badRequest().build();
         }
@@ -62,7 +62,7 @@ public class EventController {
     }
 
     @DeleteMapping("deleteEvent/{eventId}")
-    public ResponseEntity<String> deleteOrganizer(@PathVariable Integer eventId) {
+    public ResponseEntity<String> deleteEvent(@PathVariable Integer eventId) {
 
         if(eventId==null){
             return ResponseEntity.badRequest().body("Bad Request data");
