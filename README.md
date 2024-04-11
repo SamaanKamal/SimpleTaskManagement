@@ -33,7 +33,8 @@ This project is a simple Task management app implemented using Java Spring Boot.
 Navigate to the project directory
 Build the project
 Run the application
-Access the application at http://localhost:8080 or any port you configured 
+Access the application at http://localhost:8080 or any port you configured
+test the API endpoints with postman.
 ```
 
 
