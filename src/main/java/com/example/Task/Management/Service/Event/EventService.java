@@ -2,6 +2,7 @@ package com.example.Task.Management.Service.Event;
 
 import com.example.Task.Management.Cache.EventCache;
 import com.example.Task.Management.Cache.EventSync;
+import com.example.Task.Management.Configuration.ConnectionChecker;
 import com.example.Task.Management.Entity.*;
 import com.example.Task.Management.Helpers.EventHelper.EventRequest;
 import com.example.Task.Management.Repository.EventRepository;
@@ -22,6 +23,9 @@ import java.util.*;
 
 @Service
 public class EventService implements  IEventService{
+
+    @Autowired
+    private ConnectionChecker connectionChecker;
     @Autowired
     private Calendar calendarService;
 
@@ -106,13 +110,19 @@ public class EventService implements  IEventService{
 
         // adding event into the cache
         eventCache.addEvent(returnedEvent.getEventId(),returnedEvent);
+        System.out.println("here");
 
         DateTime startTime = new DateTime(eventRequest.getStartDatetime());
         DateTime endTime = new DateTime(eventRequest.getEndDatetime());
 
+        System.out.println(connectionChecker.isInternetConnected());
         // creating event using the api
-        boolean APIEvent = addEventUsingApi(eventRequest.getSummary(),eventRequest.getLocation(),eventRequest.getDescription(),startTime,endTime);
-        if(databaseEvent&&APIEvent)
+        if(connectionChecker.isInternetConnected())
+        {
+            boolean APIEvent = addEventUsingApi(eventRequest.getSummary(),eventRequest.getLocation(),eventRequest.getDescription(),startTime,endTime);
+        }
+
+        if(databaseEvent)
             return true;
 
         return false;
@@ -150,7 +160,7 @@ public class EventService implements  IEventService{
         return false;
     }
 
-    private boolean addEventUsingApi(String summary,String location,String description,DateTime start , DateTime end){
+    public boolean addEventUsingApi(String summary,String location,String description,DateTime start , DateTime end){
         // creating new Event
         TimeZone timeZone = TimeZone.getTimeZone("Africa/Cairo");
         com.google.api.services.calendar.model.Event event = new com.google.api.services.calendar.model.Event()
