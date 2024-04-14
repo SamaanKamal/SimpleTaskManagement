@@ -65,6 +65,7 @@ public class EventController {
             if(!added){
                 return ResponseEntity.internalServerError().body("There is a problem with adding using the api or the database");
             }
+            System.out.println("event created here");
             return ResponseEntity.status(HttpStatus.CREATED).body("Event Data Created Successfully");
         }
         else {
@@ -115,7 +116,7 @@ public class EventController {
         boolean offline = offlineEvents.add(eventRequest);
         if(offline)
             return ResponseEntity.ok().body("Event data saved offline and in database");
-        return ResponseEntity.ok("there is a problem with the request object");
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("there is a problem with the request object");
     }
 
     // to check internet connection every 5 minutes to add deal with offline/online issues
