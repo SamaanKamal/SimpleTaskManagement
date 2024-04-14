@@ -27,6 +27,8 @@ public class EventController {
     private ConnectionChecker connectionChecker;
     @Autowired
     private EventService eventService;
+
+    // get all events
     @GetMapping
     public ResponseEntity<EventResponse> fetchEvents(){
         eventService.syncDatabaseToCache();
@@ -38,6 +40,7 @@ public class EventController {
         EventResponse response = new EventResponse(events);
         return ResponseEntity.ok(response);
     }
+    // get  specific event
     @GetMapping("/{eventId}")
     public ResponseEntity<Event> fetchEvent(@PathVariable Integer eventId){
         eventService.syncDatabaseToCache();
@@ -48,6 +51,8 @@ public class EventController {
         }
         return ResponseEntity.ok(event);
     }
+
+    // create event offline and online
 
     @PostMapping("/createEvent")
     public ResponseEntity<String> createEvent(@RequestBody EventRequest eventRequest){
@@ -63,11 +68,13 @@ public class EventController {
             return ResponseEntity.status(HttpStatus.CREATED).body("Event Data Created Successfully");
         }
         else {
+            boolean added =eventService.addEvent(eventRequest);
             ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:8080/api/Events/offlineCreation", eventRequest, String.class);
             return response;
         }
 
     }
+    // update event
     @PutMapping("updateEvent/{eventId}")
     public ResponseEntity<Event> updateEvent(@PathVariable Integer eventId, @RequestBody EventRequest eventRequest) {
         if(eventRequest==null|| eventId ==null){
@@ -79,7 +86,7 @@ public class EventController {
         }
         return ResponseEntity.ok(updatedEvent);
     }
-
+    // delete event
     @DeleteMapping("deleteEvent/{eventId}")
     public ResponseEntity<String> deleteEvent(@PathVariable Integer eventId) {
 
@@ -92,6 +99,7 @@ public class EventController {
         }
         return ResponseEntity.ok().body("Event Data Deleted Successfully");
     }
+    // recover data lost
     @GetMapping("/recover")
     public ResponseEntity<String> recoverDataFromDatabase(){
         boolean recovered =eventService.recovery();
@@ -100,21 +108,27 @@ public class EventController {
         }
         return  ResponseEntity.ok().body("Event Data Recovered  from the database");
     }
+
+    // for offline creation
     @PostMapping("/offlineCreation")
     public ResponseEntity<String> createOfflineEvent(@RequestBody EventRequest eventRequest){
         boolean offline = offlineEvents.add(eventRequest);
         if(offline)
-            return ResponseEntity.ok().body("Event data saved offline.");
+            return ResponseEntity.ok().body("Event data saved offline and in database");
         return ResponseEntity.ok("there is a problem with the request object");
     }
+
+    // to check internet connection every 5 minutes to add deal with offline/online issues
     @Scheduled(fixedRate = 300000) // Run every  5 minutes
     public void processOfflineEvents() {
         if (connectionChecker.isInternetConnected()) {
             syncOfflineEventsWithGoogleCalendar();
         }
     }
+    // sending saved requests to ensure synchronization with database
     private void syncOfflineEventsWithGoogleCalendar() {
         if (!offlineEvents.isEmpty()) {
+            System.out.println("here");
             Iterator<EventRequest> iterator = offlineEvents.iterator();
 
             while (iterator.hasNext()) {

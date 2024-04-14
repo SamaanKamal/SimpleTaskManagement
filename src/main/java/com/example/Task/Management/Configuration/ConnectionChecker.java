@@ -13,7 +13,7 @@ public class ConnectionChecker {
             URL url = new URL("https://www.google.com");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("HEAD");
-            connection.setConnectTimeout(1000); // Timeout in milliseconds
+            connection.setConnectTimeout(1000); // 1 second
             int responseCode = connection.getResponseCode();
             return responseCode == HttpURLConnection.HTTP_OK;
         } catch (Exception e) {

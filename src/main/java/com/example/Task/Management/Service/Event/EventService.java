@@ -110,12 +110,10 @@ public class EventService implements  IEventService{
 
         // adding event into the cache
         eventCache.addEvent(returnedEvent.getEventId(),returnedEvent);
-        System.out.println("here");
 
         DateTime startTime = new DateTime(eventRequest.getStartDatetime());
         DateTime endTime = new DateTime(eventRequest.getEndDatetime());
 
-        System.out.println(connectionChecker.isInternetConnected());
         // creating event using the api
         if(connectionChecker.isInternetConnected())
         {
