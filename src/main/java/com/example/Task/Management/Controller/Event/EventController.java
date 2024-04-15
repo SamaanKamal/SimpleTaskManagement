@@ -65,7 +65,7 @@ public class EventController {
             if(!added){
                 return ResponseEntity.internalServerError().body("There is a problem with adding using the api or the database");
             }
-            System.out.println("event created here");
+
             return ResponseEntity.status(HttpStatus.CREATED).body("Event Data Created Successfully");
         }
         else {
