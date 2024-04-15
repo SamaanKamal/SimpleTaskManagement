@@ -12,12 +12,14 @@ import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.model.EventDateTime;
 import com.google.api.services.calendar.model.EventReminder;
+import com.google.api.services.calendar.model.Events;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -195,6 +197,55 @@ public class EventService implements  IEventService{
             return false;
         }
     }
+    public boolean getEventsUsingApi() throws IOException, GeneralSecurityException {
+        Events events = calendarService.events().list(calendarId)
+                .setMaxResults(10)
+                .setTimeMin(new com.google.api.client.util.DateTime(System.currentTimeMillis()))
+                .setOrderBy("startTime")
+                .setSingleEvents(true)
+                .execute();
+
+        if (events.getItems().isEmpty()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public boolean updateEventUsingApi(String eventId, String summary, String location, String description, DateTime start, DateTime end) {
+        TimeZone timeZone = TimeZone.getTimeZone("Africa/Cairo");
+        com.google.api.services.calendar.model.Event event = new com.google.api.services.calendar.model.Event()
+                .setSummary(summary)
+                .setLocation(location)
+                .setDescription(description);
+
+        event.setStart(new EventDateTime()
+                .setDateTime(start)
+                .setTimeZone(timeZone.getID()));
+
+        event.setEnd(new EventDateTime()
+                .setDateTime(end)
+                .setTimeZone(timeZone.getID()));
+
+        // Assuming 'calendarService' is your Calendar service instance
+        try {
+            calendarService.events().update(calendarId, eventId, event).execute();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public boolean deleteEventUsingApi(String eventId) {
+        try {
+            calendarService.events().delete(calendarId, eventId).execute();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
     // Synchronization: Cache to Database
     public void syncCacheToDatabase() {
         eventSync.syncCacheToDatabase();
